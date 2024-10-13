@@ -1,16 +1,18 @@
-""" File for testing and playing around with code - polygon.io API """
+"""File for testing and playing around with code - polygon.io API"""
 
 # polygon_functions.py
 import os
 from datetime import datetime, timedelta
-from polygon import RESTClient
+
 from dotenv import load_dotenv
+from polygon import RESTClient
+
 from app.utils.app_logger import app_logger
 
 load_dotenv()
 
 # Replace 'YOUR_API_KEY' with your Polygon.io API key
-API_KEY = os.getenv("POLYGON_API_KEY")  # type: ignore                  
+API_KEY = os.getenv("POLYGON_API_KEY")  # type: ignore
 
 
 def fetch_all_us_stock_tickers(client):
@@ -21,7 +23,7 @@ def fetch_all_us_stock_tickers(client):
     for i, ticker in enumerate(tickers):
         if i >= 10:
             break
-        app_logger.info("%s: %s", ticker.ticker, ticker.name)   
+        app_logger.info("%s: %s", ticker.ticker, ticker.name)
 
 
 def fetch_two_years_historical_data(client, ticker):
@@ -39,13 +41,18 @@ def fetch_two_years_historical_data(client, ticker):
         sort="asc",
         limit=5000,
     )
-    
+
     # Check if the fetched data is empty
     if not aggs:
-        app_logger.info("No historical data found for ticker: %s. Please check if the ticker is valid.", ticker)
+        app_logger.info(
+            "No historical data found for ticker: %s. Please check if the ticker is valid.",
+            ticker,
+        )
         return []  # Return an empty list if no data is found
 
-    app_logger.info("Number of days fetched: %d", len(aggs))  # Changed to lazy formatting
+    app_logger.info(
+        "Number of days fetched: %d", len(aggs)
+    )  # Changed to lazy formatting
     app_logger.info("First 5 days of data:")
     for agg in aggs[:5]:
         date = datetime.fromtimestamp(agg.timestamp / 1000).date()
@@ -59,7 +66,7 @@ def fetch_end_of_day_data(client, ticker="SPY"):
     previous_close = client.get_previous_close(ticker, adjusted=True)
     for pc in previous_close.results:
         date = datetime.fromtimestamp(pc["t"] / 1000).date()
-        app_logger.info("Date: %s, Close: %s", date, pc['c'])
+        app_logger.info("Date: %s, Close: %s", date, pc["c"])
 
 
 def fetch_reference_data(client, ticker="SPY"):
@@ -105,7 +112,10 @@ def fetch_corporate_actions(client, ticker="SPY"):
     if corporate_actions.results:
         for ca in corporate_actions.results:
             app_logger.info(
-                "Type: %s, Effective Date: %s, Details: %s", ca.ca_type, ca.effective_date, ca.details
+                "Type: %s, Effective Date: %s, Details: %s",
+                ca.ca_type,
+                ca.effective_date,
+                ca.details,
             )
     else:
         app_logger.info("No corporate actions found for this ticker.")

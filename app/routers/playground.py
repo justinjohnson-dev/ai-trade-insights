@@ -1,12 +1,10 @@
 import os
 
+from dotenv import load_dotenv
 from fastapi import APIRouter, HTTPException
 from polygon import RESTClient
-from dotenv import load_dotenv
-from app.controllers.playground import (
-    fetch_two_years_historical_data,
-    calculate_technical_indicators,
-)
+
+from app.controllers.playground import fetch_two_years_historical_data
 from app.utils.app_logger import log_exception
 
 playground_router = APIRouter(
