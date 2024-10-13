@@ -24,7 +24,7 @@ def fetch_all_us_stock_tickers(client):
         app_logger.info("%s: %s", ticker.ticker, ticker.name)   
 
 
-def fetch_two_years_historical_data(client, ticker="SPY"):
+def fetch_two_years_historical_data(client, ticker):
     """Fetches 2 years of historical data for the given ticker."""
     app_logger.info("Fetching 2 years of historical data for %s...", ticker)
     end_date = datetime.now()
@@ -39,6 +39,12 @@ def fetch_two_years_historical_data(client, ticker="SPY"):
         sort="asc",
         limit=5000,
     )
+    
+    # Check if the fetched data is empty
+    if not aggs:
+        app_logger.info("No historical data found for ticker: %s. Please check if the ticker is valid.", ticker)
+        return []  # Return an empty list if no data is found
+
     app_logger.info("Number of days fetched: %d", len(aggs))  # Changed to lazy formatting
     app_logger.info("First 5 days of data:")
     for agg in aggs[:5]:
