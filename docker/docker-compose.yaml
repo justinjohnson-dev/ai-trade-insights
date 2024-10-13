@@ -1,0 +1,24 @@
+version: '3'
+
+services:
+  fastapi:
+    build:
+      context: ..  # Go up one level to access the app directory
+      dockerfile: docker/Dockerfile.fastapi  # Updated path to the Dockerfile
+    command: sh -c "uvicorn app.main:app --reload --port=8080 --host=0.0.0.0"
+    env_file:
+      - ../.env  # Updated path to the .env file
+    ports:
+      - "8080:8080"
+    volumes:
+      - ..:/app  # Mount the parent directory
+
+  streamlit:
+    build:
+      context: ..  # Go up one level to access the app directory
+      dockerfile: docker/Dockerfile.streamlit
+    command: sh -c "streamlit run app/streamlit.py --server.port=8501 --server.address=0.0.0.0"
+    ports:
+      - "8501:8501"
+    volumes:
+      - ..:/app  # Mount the parent directory

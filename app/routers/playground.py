@@ -19,17 +19,13 @@ load_dotenv()
 API_KEY = os.getenv("POLYGON_API_KEY")
 
 
-@playground_router.get("/playground")
-async def playground():
+@playground_router.post("/playground")
+async def playground(request: dict):
     try:
+        # ticker is passed in the request body
         client = RESTClient(API_KEY)
-        aggs = fetch_two_years_historical_data(client, ticker="SPY")
-        return {
-            "sma": f"${round(calculate_technical_indicators(aggs), 2)}",
-            "ticker": "SPY",
-            "period": 45,
-            "aggs": aggs,
-        }
+        data = fetch_two_years_historical_data(client, ticker=request["ticker"].upper())
+        return data
     except Exception as e:
         log_exception()
         raise HTTPException(status_code=500, detail=str(e)) from e
