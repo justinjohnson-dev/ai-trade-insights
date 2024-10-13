@@ -2,14 +2,6 @@ from fastapi import FastAPI
 
 from app.routers.app_router import app_router
 from app.routers.playground import playground_router
-
-
-
-
-
-
-
-
 from app.utils.app_logger import app_logger
 
 app = FastAPI()
