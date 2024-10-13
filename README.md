@@ -1,5 +1,3 @@
-## coming soon
-
 # ai-trade-insights
 Repository for our FastAPI micro service that handles all /ai related endpoints
 
